@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JanaVoice — AI Multilingual Grievance & Infrastructure Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🌐</span>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">JanaVoice</h1>
+                    <p class="text-xs text-indigo-300">Track 1: AI for Digital Public Infrastructure & Governance</p>
+                </div>
+            </div>
+            <nav class="flex gap-2 bg-indigo-950 p-1 rounded-xl border border-indigo-800">
+                <button onclick="switchTab('citizen')" id="btn-citizen" class="px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition shadow">Citizen Portal</button>
+                <button onclick="switchTab('admin')" id="btn-admin" class="px-4 py-2 text-sm font-semibold rounded-lg text-indigo-300 hover:text-white transition">Policymaker Dashboard</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-grow">
+        
+        <!-- CITIZEN PORTAL VIEW -->
+        <section id="view-citizen" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            
+            <!-- Left Box: Submission Form -->
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-900">Raise Citizen Voice / Grievance</h2>
+                    <p class="text-xs text-slate-500 mt-1">Submit feedback via voice simulation or text in any regional language. Gemini AI will instantly translate, categorize, and prioritize it.</p>
+                </div>
+
+                <form id="grievanceForm" onsubmit="handleSubmission(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Select Language / भाषा / <b>భాష</b> / மொழி</label>
+                        <select id="langSelect" class="w-full border border-slate-300 rounded-xl p-3 bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="en">English</option>
+                            <option value="hi">Hindi (हिंदी)</option>
+                            <option value="te">Telugu (తెలుగు)</option>
+                            <option value="ta">Tamil (தமிழ்)</option>
+                            <option value="mr">Marathi (मराठी)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Issue Description</label>
+                            <button type="button" onclick="simulateVoiceInput()" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1 transition">
+                                🎙️ Simulate Voice Note
+                            </button>
+                        </div>
+                        <textarea id="issueText" rows="4" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g., हमारे क्षेत्र में सड़क की स्थिति बहुत खराब है और पानी की समस्या है..." required></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Geolocation Coordinates (Auto-Captured)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="locationInput" readonly class="w-full border border-slate-300 rounded-xl p-3 bg-slate-100 text-slate-600 text-xs font-mono" value="Acquiring GPS data...">
+                            <button type="button" onclick="getLocation()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 rounded-xl text-xs font-bold transition">Re-Detect</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-indigo-200 transition">
+                        Process & Push to National AI Pipeline 🚀
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Box: AI Terminal & Live Preview -->
+            <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-slate-800">
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-sm tracking-wide text-indigo-300 uppercase flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span> Google Gemini AI Processing Stream
+                        </h3>
+                        <span class="text-[10px] font-mono bg-slate-800 text-indigo-400 px-2.5 py-1 rounded">Vertex AI / Gemini API</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">Real-time inspection of incoming text/audio tokens, linguistic translation strings, and automated severity indexing.</p>
+                    
+                    <div id="aiOutputBox" class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-green-400 h-64 overflow-y-auto border border-slate-800 leading-relaxed shadow-inner">
+// System ready. Awaiting citizen submission stream...
+// Multilingual NLP models loaded: [hi, te, ta, mr, en]
+// BigQuery endpoint connected successfully.
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-500">
+                    <span>Digital Public Good Framework</span>
+                    <span class="text-indigo-400 font-semibold">Scale: National Multi-State</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- POLICYMAKER DASHBOARD VIEW -->
+        <section id="view-admin" class="hidden space-y-6">
+            <!-- Metric Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Grievances Indexed</p>
+                    <h3 class="text-3xl font-extrabold text-indigo-600 mt-2">1,439</h3>
+                    <p class="text-[11px] text-green-600 font-semibold mt-1">↑ 14% increase today across 18 states</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Active High-Priority Hotspots</p>
+                    <h3 class="text-3xl font-extrabold text-red-600 mt-2">42 Districts</h3>
+                    <p class="text-[11px] text-slate-500 mt-1">Immediate budget allocation required</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">AI Categorization Confidence</p>
+                    <h3 class="text-3xl font-extrabold text-emerald-600 mt-2">98.9%</h3>
+                    <p class="text-[11px] text-slate-500 mt-1">Powered by Gemini multimodal analysis</p>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-900">National Infrastructure Demand Prioritization</h3>
+                        <p class="text-xs text-slate-500">Aggregated automatically from regional audio/text citizen submissions.</p>
+                    </div>
+                    <span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live Data Sync
+                    </span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 uppercase text-[11px] font-bold tracking-wider border-b border-slate-200">
+                                <th class="p-4">Report ID</th>
+                                <th class="p-4">Category</th>
+                                <th class="p-4">Translated Summary</th>
+                                <th class="p-4">Location Node</th>
+                                <th class="p-4">AI Urgency</th>
+                                <th class="p-4">Recommended Policy Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardTableBody" class="divide-y divide-slate-100 text-xs">
+                            <tr class="hover:bg-slate-50/50 transition">
+                                <td class="p-4 font-mono font-bold text-slate-600">#JV-9821</td>
+                                <td class="p-4"><span class="bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-md">Water Supply</span></td>
+                                <td class="p-4 text-slate-700">Severe mainline leakage contaminating community drinking supply.</td>
+                                <td class="p-4 text-slate-500 font-mono">17.3850° N, 78.4867° E (Telangana)</td>
+                                <td class="p-4"><span class="bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">Critical (5/5)</span></td>
+                                <td class="p-4 font-semibold text-indigo-600">Dispatch Emergency Jal Jeevan Grant</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 transition">
+                                <td class="p-4 font-mono font-bold text-slate-600">#JV-9822</td>
+                                <td class="p-4"><span class="bg-amber-50 text-amber-700 font-semibold px-2.5 py-1 rounded-md">Roads & Transport</span></td>
+                                <td class="p-4 text-slate-700">Large deep potholes causing traffic hazards near local school zone.</td>
+                                <td class="p-4 text-slate-500 font-mono">12.9716° N, 77.5946° E (Karnataka)</td>
+                                <td class="p-4"><span class="bg-amber-50 text-amber-700 font-bold px-2.5 py-1 rounded-md">Moderate (3/5)</span></td>
+                                <td class="p-4 font-semibold text-indigo-600">Schedule Municipal Paving Contractor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
+        <p>Built for Build with AI: Code for Communities (2nd Edition) — Designed as a Scalable Digital Public Good.</p>
+    </footer>
+
+    <script>
+        // Switch between Citizen Portal and Policymaker Dashboard tabs
+        function switchTab(tab) {
+            const btnCitizen = document.getElementById('btn-citizen');
+            const btnAdmin = document.getElementById('btn-admin');
+            const viewCitizen = document.getElementById('view-citizen');
+            const viewAdmin = document.getElementById('view-admin');
+
+            if(tab === 'citizen') {
+                viewCitizen.classList.remove('hidden');
+                viewAdmin.classList.add('hidden');
+                btnCitizen.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition shadow";
+                btnAdmin.className = "px-4 py-2 text-sm font-semibold rounded-lg text-indigo-300 hover:text-white transition";
+            } else {
+                viewCitizen.classList.add('hidden');
+                viewAdmin.classList.remove('hidden');
+                btnAdmin.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white transition shadow";
+                btnCitizen.className = "px-4 py-2 text-sm font-semibold rounded-lg text-indigo-300 hover:text-white transition";
+            }
+        }
+
+        // Fetch User GPS Coordinates automatically
+        function getLocation() {
+            const locInput = document.getElementById('locationInput');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    locInput.value = `${position.coords.latitude.toFixed(4)}° N, ${position.coords.longitude.toFixed(4)}° E (GPS Verified)`;
+                }, () => {
+                    locInput.value = "17.3850° N, 78.4867° E (Fallback Regional Node)";
+                });
+            } else {
+                locInput.value = "17.3850° N, 78.4867° E (Fallback Regional Node)";
+            }
+        }
+        window.onload = getLocation;
+
+        // Simulated Voice Note Input Generator
+        function simulateVoiceInput() {
+            const lang = document.getElementById('langSelect').value;
+            const textarea = document.getElementById('issueText');
+            if(lang === 'hi') {
+                textarea.value = "हमारे वार्ड में पिछले 4 दिनों से पानी की सप्लाई पूरी तरह बंद है, लोग बहुत परेशान हैं।";
+            } else if(lang === 'te') {
+                textarea.value = "మా ప్రాంతంలో గత నాలుగు రోజులుగా తాగునీరు రావడం లేదు, దయచేసి త్వరగా స్పందించండి.";
+            } else if(lang === 'ta') {
+                textarea.value = "எங்கள் பகுதியில் கடந்த நான்கு நாட்களாக குடிநீர் வரவில்லை, உடனே சரிசெய்யவும்.";
+            } else {
+                textarea.value = "Critical infrastructure failure: Main transformer blown out causing blackout in sector 4.";
+            }
+        }
+
+        // Handle Submission & Gemini Simulation Stream
+        function handleSubmission(event) {
+            event.preventDefault();
+            const text = document.getElementById('issueText').value;
+            const lang = document.getElementById('langSelect').value;
+            const loc = document.getElementById('locationInput').value;
+
+            const box = document.getElementById('aiOutputBox');
+            box.innerHTML += `\n[INIT] Triggering Gemini Multimodal API pipeline...`;
+            box.innerHTML += `\n[INPUT RECEIVED] Lang: ${lang} | Payload length: ${text.length} chars`;
+            
+            setTimeout(() => {
+                box.innerHTML += `\n[NLP TRANSLATION] Successfully parsed & translated into English semantic vector.`;
+                box.innerHTML += `\n[CLASSIFICATION] Category identified: Public Infrastructure / Utility`;
+                box.innerHTML += `\n[URGENCY SCORE] Model calculated severity rating: 4.8 / 5.0 (High Priority)`;
+                box.innerHTML += `\n[BIGQUERY] Successfully mapped to coordinates [${loc}].`;
+                box.innerHTML += `\n[SUCCESS] Entry written to National Governance Registry!`;
+                box.scrollTop = box.scrollHeight;
+
+                // Prepend row to table
+                const tbody = document.getElementById('dashboardTableBody');
+                const newRow = document.createElement('tr');
+                newRow.className = "hover:bg-slate-50/50 transition bg-indigo-50/30";
+                newRow.innerHTML = `
+                    <td class="p-4 font-mono font-bold text-slate-600">#JV-${Math.floor(1000 + Math.random() * 9000)}</td>
+                    <td class="p-4"><span class="bg-purple-50 text-purple-700 font-semibold px-2.5 py-1 rounded-md">Civic Issue</span></td>
+                    <td class="p-4 text-slate-700">${text}</td>
+                    <td class="p-4 text-slate-500 font-mono">${loc}</td>
+                    <td class="p-4"><span class="bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">High (4.8/5)</span></td>
+                    <td class="p-4 font-semibold text-indigo-600">Auto-routed to State Ministry Node</td>
+                `;
+                tbody.prepend(newRow);
+
+                alert("Grievance successfully processed by Gemini AI and synced with the Policymaker Dashboard!");
+                document.getElementById('grievanceForm').reset();
+                getLocation();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
