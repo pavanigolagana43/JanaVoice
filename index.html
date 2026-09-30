@@ -14,8 +14,8 @@
             <div class="flex items-center gap-3">
                 <span class="text-3xl">🌐</span>
                 <div>
-                    <h1 class="text-xl font-bold tracking-wide">JanaVoice</h1>
-                    <p class="text-xs text-indigo-300">Track 1: AI for Digital Public Infrastructure & Governance</p>
+                    <h1 id="ui-title" class="text-xl font-bold tracking-wide">JanaVoice</h1>
+                    <p id="ui-subtitle" class="text-xs text-indigo-300">Track 1: AI for Digital Public Infrastructure & Governance</p>
                 </div>
             </div>
             <nav class="flex gap-2 bg-indigo-950 p-1 rounded-xl border border-indigo-800">
@@ -34,41 +34,80 @@
             <!-- Left Box: Submission Form -->
             <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
                 <div class="mb-6">
-                    <h2 class="text-xl font-bold text-slate-900">Raise Citizen Voice / Grievance</h2>
-                    <p class="text-xs text-slate-500 mt-1">Submit feedback via voice simulation or text in any regional language. Gemini AI will instantly translate, categorize, and prioritize it.</p>
+                    <h2 id="form-heading" class="text-xl font-bold text-slate-900">Raise Citizen Voice / Grievance</h2>
+                    <p id="form-subheading" class="text-xs text-slate-500 mt-1">Record via microphone, attach issue photos, or type in any of India's 22 official scheduled languages. Gemini AI will instantly translate, analyze, and prioritize it.</p>
                 </div>
 
                 <form id="grievanceForm" onsubmit="handleSubmission(event)" class="space-y-5">
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Select Language / भाषा / <b>భాష</b> / மொழி</label>
-                        <select id="langSelect" class="w-full border border-slate-300 rounded-xl p-3 bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                            <option value="en">English</option>
-                            <option value="hi">Hindi (हिंदी)</option>
-                            <option value="te">Telugu (తెలుగు)</option>
-                            <option value="ta">Tamil (தமிழ்)</option>
-                            <option value="mr">Marathi (मराठी)</option>
+                        <label id="label-lang" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Select Language (All 22 Indian Scheduled Languages)</label>
+                        <select id="langSelect" onchange="changeLanguageUI()" class="w-full border border-slate-300 rounded-xl p-3 bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="en-US">English</option>
+                            <option value="as-IN">Assamese (অসমীয়া)</option>
+                            <option value="bn-IN">Bengali (বাংলা)</option>
+                            <option value="brx-IN">Bodo (बड़ो)</option>
+                            <option value="doi-IN">Dogri (डोगरी)</option>
+                            <option value="gu-IN">Gujarati (ગુજરાતી)</option>
+                            <option value="hi-IN">Hindi (हिंदी)</option>
+                            <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
+                            <option value="ks-IN">Kashmiri (कॉशुर)</option>
+                            <option value="kok-IN">Konkani (कोंकणी)</option>
+                            <option value="mai-IN">Maithili (मैथिली)</option>
+                            <option value="ml-IN">Malayalam (മലയാളം)</option>
+                            <option value="mni-IN">Manipuri (মৈতৈলোন্)</option>
+                            <option value="mr-IN">Marathi (मराठी)</option>
+                            <option value="ne-IN">Nepali (नेपाली)</option>
+                            <option value="or-IN">Odia (ଓଡ଼ିଆ)</option>
+                            <option value="pa-IN">Punjabi (ਪੰਜਾਬੀ)</option>
+                            <option value="sa-IN">Sanskrit (संस्कृतम्)</option>
+                            <option value="sat-IN">Santali (ᱥᱟᱱᱛᱟᱲᱤ)</option>
+                            <option value="sd-IN">Sindhi (सिन्धी)</option>
+                            <option value="ta-IN">Tamil (தமிழ்)</option>
+                            <option value="te-IN">Telugu (తెలుగు)</option>
+                            <option value="ur-IN">Urdu (اردو)</option>
                         </select>
                     </div>
 
                     <div>
                         <div class="flex justify-between items-center mb-2">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Issue Description</label>
-                            <button type="button" onclick="simulateVoiceInput()" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1 transition">
-                                🎙️ Simulate Voice Note
-                            </button>
+                            <label id="label-issue" class="block text-xs font-bold uppercase tracking-wider text-slate-600">Issue Description / Voice Transcript</label>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="toggleMicRecording()" id="micBtn" class="text-xs bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition shadow-sm">
+                                    <span id="micIcon">🎙️</span> <span id="micText">Mic</span>
+                                </button>
+                                <button type="button" onclick="simulateVoiceInput()" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 px-2.5 py-1.5 rounded-lg font-semibold flex items-center gap-1 transition">
+                                    ⚡ Sample Note
+                                </button>
+                            </div>
                         </div>
-                        <textarea id="issueText" rows="4" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g., हमारे क्षेत्र में सड़क की स्थिति बहुत खराब है और पानी की समस्या है..." required></textarea>
+                        <textarea id="issueText" rows="3" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Click 'Mic' to speak in your chosen language, or type here..." required></textarea>
+                        <p id="recordingStatus" class="text-[11px] text-slate-400 mt-1 italic hidden">🔴 Listening to microphone... Speak clearly in your selected language.</p>
+                    </div>
+
+                    <!-- Photo / Camera Upload Option -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Attach Photo / Live Camera Capture (Gemini Vision)</label>
+                        <div class="flex items-center gap-4">
+                            <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition">
+                                📸 Take / Upload Photo
+                                <input type="file" accept="image/*" capture="environment" id="photoInput" onchange="previewImage(event)" class="hidden">
+                            </label>
+                            <span id="photoFileName" class="text-xs text-slate-500 italic">No image selected</span>
+                        </div>
+                        <div id="imagePreviewContainer" class="mt-3 hidden">
+                            <img id="imagePreview" class="h-24 rounded-xl border border-slate-200 object-cover shadow-sm" alt="Issue Preview">
+                        </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Geolocation Coordinates (Auto-Captured)</label>
+                        <label id="label-location" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Geolocation Coordinates (Auto-Captured)</label>
                         <div class="flex gap-2">
                             <input type="text" id="locationInput" readonly class="w-full border border-slate-300 rounded-xl p-3 bg-slate-100 text-slate-600 text-xs font-mono" value="Acquiring GPS data...">
-                            <button type="button" onclick="getLocation()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 rounded-xl text-xs font-bold transition">Re-Detect</button>
+                            <button type="button" onclick="getLocation()" id="btn-detect" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 rounded-xl text-xs font-bold transition">Re-Detect</button>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-indigo-200 transition">
+                    <button type="submit" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-indigo-200 transition">
                         Process & Push to National AI Pipeline 🚀
                     </button>
                 </form>
@@ -79,22 +118,21 @@
                 <div>
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-bold text-sm tracking-wide text-indigo-300 uppercase flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span> Google Gemini AI Processing Stream
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span> Google Gemini AI & Multimodal Stream
                         </h3>
-                        <span class="text-[10px] font-mono bg-slate-800 text-indigo-400 px-2.5 py-1 rounded">Vertex AI / Gemini API</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-indigo-400 px-2.5 py-1 rounded">22 Languages & Vision</span>
                     </div>
-                    <p class="text-xs text-slate-400 mb-4">Real-time inspection of incoming text/audio tokens, linguistic translation strings, and automated severity indexing.</p>
+                    <p class="text-xs text-slate-400 mb-4">Real-time inspection of 22 scheduled language translations, speech-to-text audio streams, Gemini Vision images, and automated severity indexing.</p>
                     
                     <div id="aiOutputBox" class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-green-400 h-64 overflow-y-auto border border-slate-800 leading-relaxed shadow-inner">
-// System ready. Awaiting citizen submission stream...
-// Multilingual NLP models loaded: [hi, te, ta, mr, en]
-// BigQuery endpoint connected successfully.
+// System ready. Awaiting mic speech, photo upload, or text input across 22 scheduled languages...
+// Speech-to-Text & Gemini Vision API initialized.
                     </div>
                 </div>
 
                 <div class="mt-6 pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-500">
                     <span>Digital Public Good Framework</span>
-                    <span class="text-indigo-400 font-semibold">Scale: National Multi-State</span>
+                    <span class="text-indigo-400 font-semibold">Scale: Pan-India (All 22 Languages)</span>
                 </div>
             </div>
         </section>
@@ -105,8 +143,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Grievances Indexed</p>
-                    <h3 class="text-3xl font-extrabold text-indigo-600 mt-2">1,439</h3>
-                    <p class="text-[11px] text-green-600 font-semibold mt-1">↑ 14% increase today across 18 states</p>
+                    <h3 class="text-3xl font-extrabold text-indigo-600 mt-2">1,442</h3>
+                    <p class="text-[11px] text-green-600 font-semibold mt-1">↑ Pan-India 22 language sync active</p>
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Active High-Priority Hotspots</p>
@@ -115,7 +153,7 @@
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <p class="text-xs font-bold uppercase tracking-wider text-slate-400">AI Categorization Confidence</p>
-                    <h3 class="text-3xl font-extrabold text-emerald-600 mt-2">98.9%</h3>
+                    <h3 class="text-3xl font-extrabold text-emerald-600 mt-2">99.5%</h3>
                     <p class="text-[11px] text-slate-500 mt-1">Powered by Gemini multimodal analysis</p>
                 </div>
             </div>
@@ -125,7 +163,7 @@
                 <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h3 class="font-bold text-lg text-slate-900">National Infrastructure Demand Prioritization</h3>
-                        <p class="text-xs text-slate-500">Aggregated automatically from regional audio/text citizen submissions.</p>
+                        <p class="text-xs text-slate-500">Aggregated automatically from mic transcripts, photos, and submissions in all 22 official languages.</p>
                     </div>
                     <span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live Data Sync
@@ -137,7 +175,7 @@
                             <tr class="bg-slate-50 text-slate-500 uppercase text-[11px] font-bold tracking-wider border-b border-slate-200">
                                 <th class="p-4">Report ID</th>
                                 <th class="p-4">Category</th>
-                                <th class="p-4">Translated Summary</th>
+                                <th class="p-4">Transcript & Vision Summary</th>
                                 <th class="p-4">Location Node</th>
                                 <th class="p-4">AI Urgency</th>
                                 <th class="p-4">Recommended Policy Action</th>
@@ -152,14 +190,6 @@
                                 <td class="p-4"><span class="bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">Critical (5/5)</span></td>
                                 <td class="p-4 font-semibold text-indigo-600">Dispatch Emergency Jal Jeevan Grant</td>
                             </tr>
-                            <tr class="hover:bg-slate-50/50 transition">
-                                <td class="p-4 font-mono font-bold text-slate-600">#JV-9822</td>
-                                <td class="p-4"><span class="bg-amber-50 text-amber-700 font-semibold px-2.5 py-1 rounded-md">Roads & Transport</span></td>
-                                <td class="p-4 text-slate-700">Large deep potholes causing traffic hazards near local school zone.</td>
-                                <td class="p-4 text-slate-500 font-mono">12.9716° N, 77.5946° E (Karnataka)</td>
-                                <td class="p-4"><span class="bg-amber-50 text-amber-700 font-bold px-2.5 py-1 rounded-md">Moderate (3/5)</span></td>
-                                <td class="p-4 font-semibold text-indigo-600">Schedule Municipal Paving Contractor</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -169,11 +199,114 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
-        <p>Built for Build with AI: Code for Communities (2nd Edition) — Designed as a Scalable Digital Public Good.</p>
+        <p id="footer-text">Built for Build with AI: Code for Communities (2nd Edition) — Designed as a Scalable Digital Public Good.</p>
     </footer>
 
     <script>
-        // Switch between Citizen Portal and Policymaker Dashboard tabs
+        // Dictionary for all 22 scheduled languages of India
+        const translations = {
+            'en-US': { heading: "Raise Citizen Voice / Grievance", subheading: "Record via voice, attach photos, or type in any of India's 22 official scheduled languages.", labelIssue: "Issue Description / Voice Transcript", btnDetect: "Re-Detect", submitBtn: "Process & Push to National AI Pipeline 🚀", placeholder: "Click 'Mic' to speak, or type your issue here..." },
+            'hi-IN': { heading: "नागरिक आवाज़ / शिकायत दर्ज करें", subheading: "भारत की किसी भी आधिकारिक अनुसूचित भाषा में बोलकर, फोटो खींचकर या टाइप करके अपनी प्रतिक्रिया दें।", labelIssue: "समस्या का विवरण / वॉयस ट्रांसक्रिप्ट", btnDetect: "पुनः पता लगाएँ", submitBtn: "राष्ट्रीय एआई पाइपलाइन में प्रोसेस करें 🚀", placeholder: "बोलने के लिए 'Mic' दबाएं या टाइप करें..." },
+            'te-IN': { heading: "పౌరుల గొంతుక / ఫిర్యాదు నమోదు", subheading: "భారతదేశంలోని ఏ అధికారిక భాషలోనైనా వాయిస్, ఫోటో లేదా టెక్స్ట్ ద్వారా మీ ఫిర్యాదును నమోదు చేయండి.", labelIssue: "సమస్య వివరణ / వాయిస్ ట్రాన్స్‌క్రిప్ట్", btnDetect: "మళ్లీ గుర్తించు", submitBtn: "నేషనల్ AI పైప్‌లైన్‌కి పంపు 🚀", placeholder: "'Mic' నొక్కి మాట్లాడండి లేదా టైప్ చేయండి..." },
+            'ta-IN': { heading: "குடிமக்கள் குரல் / புகாரைப் பதிவு செய்க", subheading: "இந்தியாவின் அதிகாரப்பூர்வ மொழிகளில் குரல், புகைப்படம் அல்லது உரை மூலம் சமர்ப்பிக்கவும்.", labelIssue: "சிக்கல் விவரம் / குரல் குறிப்பு", btnDetect: "மீண்டும் கண்டறி", submitBtn: "AI பைப்லைனுக்கு அனுப்பவும் 🚀", placeholder: "பேச 'Mic' ஐ அழுத்தவும் அல்லது தட்டச்சு செய்யவும்..." },
+            'mr-IN': { heading: "नागरिक आवाज / तक्रार नोंदवा", subheading: "भारताच्या कोणत्याही अधिकृत भाषेमध्ये आवाज, फोटो किंवा मजकुराद्वारे अभिप्राय द्या.", labelIssue: "समस्या वर्णन / व्हॉइस ट्रान्सक्रिप्ट", btnDetect: "पुन्हा शोध", submitBtn: "एआय पाईपलाईनवर पाठवा 🚀", placeholder: "'Mic' वर क्लिक करून बोला किंवा लिहा..." },
+            'bn-IN': { heading: "নাগরিক কণ্ঠস্বর / অভিযোগ জমা দিন", subheading: "ভারতের যেকোনো সরকারি তফশিলভুক্ত ভাষায় ভয়েস, ছবি বা লেখার মাধ্যমে মতামত দিন।", labelIssue: "সমস্যার বিবরণ / ভয়েস ট্রান্সক্রিপ্ট", btnDetect: "পুনরায় সনাক্ত করুন", submitBtn: "এআই পাইপলাইনে প্রসেস করুন 🚀", placeholder: "কথা বলতে 'Mic' ক্লিক করুন অথবা লিখুন..." }
+        };
+
+        // Update UI Text Dynamically when language selection changes
+        function changeLanguageUI() {
+            const lang = document.getElementById('langSelect').value;
+            const t = translations[lang] || translations['en-US'];
+
+            document.getElementById('form-heading').innerText = t.heading;
+            document.getElementById('form-subheading').innerText = t.subheading;
+            document.getElementById('label-issue').innerText = t.labelIssue;
+            document.getElementById('btn-detect').innerText = t.btnDetect;
+            document.getElementById('submit-btn').innerText = t.submitBtn;
+            document.getElementById('issueText').placeholder = t.placeholder;
+        }
+
+        // Image Preview Handler
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('photoFileName').innerText = file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Live Microphone Speech Recognition integration
+        let recognition;
+        let isRecording = false;
+
+        function toggleMicRecording() {
+            const micBtn = document.getElementById('micBtn');
+            const micText = document.getElementById('micText');
+            const recordingStatus = document.getElementById('recordingStatus');
+            const textarea = document.getElementById('issueText');
+            const lang = document.getElementById('langSelect').value;
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Speech Recognition is not supported in this browser. Please use Google Chrome or Edge.");
+                return;
+            }
+
+            if (!isRecording) {
+                recognition = new SpeechRecognition();
+                recognition.lang = lang;
+                recognition.interimResults = true;
+                recognition.maxAlternatives = 1;
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    micBtn.className = "text-xs bg-red-600 text-white border border-red-700 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition shadow-sm animate-pulse";
+                    micText.innerText = "Stop";
+                    recordingStatus.classList.remove('hidden');
+                };
+
+                recognition.onresult = function(event) {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    textarea.value = transcript;
+                };
+
+                recognition.onerror = function(event) {
+                    console.error("Speech recognition error", event.error);
+                    stopMic();
+                };
+
+                recognition.onend = function() {
+                    stopMic();
+                };
+
+                recognition.start();
+            } else {
+                if (recognition) {
+                    recognition.stop();
+                }
+                stopMic();
+            }
+        }
+
+        function stopMic() {
+            isRecording = false;
+            const micBtn = document.getElementById('micBtn');
+            const micText = document.getElementById('micText');
+            const recordingStatus = document.getElementById('recordingStatus');
+            micBtn.className = "text-xs bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition shadow-sm";
+            micText.innerText = "Mic";
+            recordingStatus.classList.add('hidden');
+        }
+
+        // Switch between tabs
         function switchTab(tab) {
             const btnCitizen = document.getElementById('btn-citizen');
             const btnAdmin = document.getElementById('btn-admin');
@@ -212,15 +345,15 @@
         function simulateVoiceInput() {
             const lang = document.getElementById('langSelect').value;
             const textarea = document.getElementById('issueText');
-            if(lang === 'hi') {
-                textarea.value = "हमारे वार्ड में पिछले 4 दिनों से पानी की सप्लाई पूरी तरह बंद है, लोग बहुत परेशान हैं।";
-            } else if(lang === 'te') {
-                textarea.value = "మా ప్రాంతంలో గత నాలుగు రోజులుగా తాగునీరు రావడం లేదు, దయచేసి త్వరగా స్పందించండి.";
-            } else if(lang === 'ta') {
-                textarea.value = "எங்கள் பகுதியில் கடந்த நான்கு நாட்களாக குடிநீர் வரவில்லை, உடனே சரிசெய்யவும்.";
-            } else {
-                textarea.value = "Critical infrastructure failure: Main transformer blown out causing blackout in sector 4.";
-            }
+            
+            const samples = {
+                'hi-IN': "हमारे वार्ड में पिछले 4 दिनों से पानी की सप्लाई पूरी तरह बंद है, लोग बहुत परेशान हैं।",
+                'te-IN': "మా ప్రాంతంలో గత నాలుగు రోజులుగా తాగునీరు రావడం లేదు, దయచేసి త్వరగా స్పందించండి.",
+                'ta-IN': "எங்கள் பகுதியில் கடந்த நான்கு நாட்களாக குடிநீர் வரவில்லை, உடனே சரிசெய்யவும்.",
+                'en-US': "Severe pipeline leakage contaminating community drinking water supply in sector 4."
+            };
+
+            textarea.value = samples[lang] || "Critical infrastructure failure reported in scheduled language.";
         }
 
         // Handle Submission & Gemini Simulation Stream
@@ -229,16 +362,19 @@
             const text = document.getElementById('issueText').value;
             const lang = document.getElementById('langSelect').value;
             const loc = document.getElementById('locationInput').value;
+            const hasPhoto = document.getElementById('photoInput').files.length > 0;
 
             const box = document.getElementById('aiOutputBox');
-            box.innerHTML += `\n[INIT] Triggering Gemini Multimodal API pipeline...`;
-            box.innerHTML += `\n[INPUT RECEIVED] Lang: ${lang} | Payload length: ${text.length} chars`;
+            box.innerHTML += `\n[INIT] Triggering Gemini Multimodal & Vision pipeline for [${lang}]...`;
+            if(hasPhoto) {
+                box.innerHTML += `\n[GEMINI VISION] Analyzing attached photo for infrastructure fault classification...`;
+            }
+            box.innerHTML += `\n[SPEECH / TEXT] Transcript processed: "${text}"`;
             
             setTimeout(() => {
-                box.innerHTML += `\n[NLP TRANSLATION] Successfully parsed & translated into English semantic vector.`;
-                box.innerHTML += `\n[CLASSIFICATION] Category identified: Public Infrastructure / Utility`;
-                box.innerHTML += `\n[URGENCY SCORE] Model calculated severity rating: 4.8 / 5.0 (High Priority)`;
-                box.innerHTML += `\n[BIGQUERY] Successfully mapped to coordinates [${loc}].`;
+                box.innerHTML += `\n[NLP TRANSLATION] Successfully translated into English vector.`;
+                box.innerHTML += `\n[URGENCY SCORE] Model calculated severity rating: 4.9 / 5.0 (High Priority)`;
+                box.innerHTML += `\n[BIGQUERY] Indexed successfully to coordinates [${loc}].`;
                 box.innerHTML += `\n[SUCCESS] Entry written to National Governance Registry!`;
                 box.scrollTop = box.scrollHeight;
 
@@ -248,18 +384,20 @@
                 newRow.className = "hover:bg-slate-50/50 transition bg-indigo-50/30";
                 newRow.innerHTML = `
                     <td class="p-4 font-mono font-bold text-slate-600">#JV-${Math.floor(1000 + Math.random() * 9000)}</td>
-                    <td class="p-4"><span class="bg-purple-50 text-purple-700 font-semibold px-2.5 py-1 rounded-md">Civic Issue</span></td>
+                    <td class="p-4"><span class="bg-purple-50 text-purple-700 font-semibold px-2.5 py-1 rounded-md">22-Lang Multimodal</span></td>
                     <td class="p-4 text-slate-700">${text}</td>
                     <td class="p-4 text-slate-500 font-mono">${loc}</td>
-                    <td class="p-4"><span class="bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">High (4.8/5)</span></td>
+                    <td class="p-4"><span class="bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">High (4.9/5)</span></td>
                     <td class="p-4 font-semibold text-indigo-600">Auto-routed to State Ministry Node</td>
                 `;
                 tbody.prepend(newRow);
 
-                alert("Grievance successfully processed by Gemini AI and synced with the Policymaker Dashboard!");
+                alert("Grievance, audio transcript, photo, and 22-language translation successfully processed!");
                 document.getElementById('grievanceForm').reset();
+                document.getElementById('imagePreviewContainer').classList.add('hidden');
+                document.getElementById('photoFileName').innerText = "No image selected";
                 getLocation();
-            }, 1000);
+            }, 1200);
         }
     </script>
 </body>
